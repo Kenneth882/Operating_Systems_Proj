@@ -312,4 +312,4 @@ void display_statistics(char* proto_label, struct StatMap proto_map[]) { // disp
         }
         prev_line = line;
     }
-}
+} 

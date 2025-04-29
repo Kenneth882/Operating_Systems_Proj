@@ -38,7 +38,9 @@ Test_file
 
 This is for timedexec
 
-./timedexec --time 2 sleep 5
+
+./timedexec_test_cases.sh
+
 
 
 
