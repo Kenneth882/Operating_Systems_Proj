@@ -1,3 +1,4 @@
+// memview.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +12,21 @@
 #include <sys/shm.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <limits.h> 
+
+/* ──────────────────────────────────────────────────────────────── *
+ *  Darwin vs. Linux SysV-IPC compatibility helpers                *
+ * ──────────────────────────────────────────────────────────────── */
+#ifdef __APPLE__
+  /* On macOS the key field is `_key` and nattch is unsigned short */
+  #define SHM_KEY(perm)   ((perm)._key)
+  #define SHM_NATTCH(val) ((unsigned long)(val))
+#else
+  /* On Linux the key field is `__key` and nattch is already ulong */
+  #define SHM_KEY(perm)   ((perm).__key)
+  #define SHM_NATTCH(val) ((unsigned long)(val))
+#endif
+/* ──────────────────────────────────────────────────────────────── */
 
 #define BUFFER_SIZE 4096
 
@@ -212,11 +228,11 @@ void show_shared_memory() {
         if (shmctl(id, IPC_STAT, &shm_info) != -1) {
             printf("%-10d %-10d %-10lu %-10d %-10o %lu\n",
                    id,
-                   (int)shm_info.shm_perm.__key,
+                   SHM_KEY(shm_info.shm_perm),
                    (unsigned long)(shm_info.shm_segsz / 1024),
                    shm_info.shm_perm.uid,
                    shm_info.shm_perm.mode & 0777,
-                   shm_info.shm_nattch);
+                   SHM_NATTCH(shm_info.shm_nattch));
         }
     }
 }
@@ -380,3 +396,33 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
+
+
+/*
+docker run --rm -it -v "$PWD":/src -w /src gcc:13 bash
+ apt-get update && apt-get install -y procps 
+ gcc -std=c11 -Wall -Wextra -pedantic -D_GNU_SOURCE -o memview memview.c
+
+*/  
+
+
+
+//./memview -s    
+//./memview -p 1 -v 
+//./memview -m  
+// 	./memview -z
+// ./memview -p $$ 
+
+
+/*  
+./memview -p $$ -f heap
+./memview -p $$ -f stack
+./memview -p $$ -f anonymous
+*/
+
+/*
+./memview -s 
+*/
+
+//    ./memview -s -v
+

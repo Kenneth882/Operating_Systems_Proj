@@ -1,0 +1,50 @@
+memview
+
+docker run --rm -it -v "$PWD":/src -w /src gcc:13 bash
+apt-get update && apt-get install -y procps 
+gcc -std=c11 -Wall -Wextra -pedantic -D_GNU_SOURCE -o memview memview.c
+
+This if for memview
+./memview -s    
+./memview -p 1 -v 
+./memview -m  
+./memview -z
+ ./memview -p $$ 
+
+docker run --rm -it \
+  -v "$PWD":/src -w /src \
+  gcc:13 bash -c '\
+    apt-get update -qq && apt-get install -y procps sudo > /dev/null ;\
+    gcc -O2 -D_GNU_SOURCE -o memview memview.c ;\
+    chmod +x test_memview.sh ;\
+    echo "Running tests inside Linux container..." ;\
+    ./test_memview.sh'
+
+
+
+This is for loganalyzer
+
+
+.  /loganalyzer -f demo.log
+      ./loganalyzer -f demo.log -t 4
+      ./loganalyzer -f demo.log -l warn
+      time ./loganalyzer -f big.log -t 8
+      ./loganalyzer -f big.log -t 128
+     ./loganalyzer -f big.log -t 8
+Test_file
+./loganalyzer_test.sh
+
+
+
+This is for timedexec
+
+./timedexec --time 2 sleep 5
+
+
+
+Combination:
+
+./timedexec --time 10 -- ./loganalyzer -f big.log -t 4
+
+
+

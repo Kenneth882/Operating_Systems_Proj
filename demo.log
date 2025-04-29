@@ -1,6 +1,2 @@
-[INFO]  Server started on port 8080
-[DEBUG] Initialising cache layer
-[WARN]  Low disk space on /dev/sda1
-[ERROR] Database connection refused
-[TRACE] HTTP request received: GET /
-Unstructured line without a tag
+[INFO] Boot OK
+[WARN] Low battery

@@ -12,7 +12,6 @@
 #include <getopt.h>
 #include <ctype.h>
 
-/* ------------------------------ TYPES ------------------------------ */
 typedef struct {
     size_t total, info, warn, error, debug, trace, other;
 } stats_t;
@@ -24,7 +23,6 @@ typedef struct {
     stats_t local;
 } thread_arg_t;
 
-/* ----------------------- GLOBALS & UTILITIES ----------------------- */
 static volatile sig_atomic_t stop_now = 0;
 static pthread_mutex_t aggregate_mutex = PTHREAD_MUTEX_INITIALIZER;
 static stats_t aggregate = {0};
@@ -34,7 +32,7 @@ static void on_signal(int signo) {
     stop_now = 1;
 }
 
-/* Severity ranking */
+
 enum { LVL_TRACE, LVL_DEBUG, LVL_INFO, LVL_WARN, LVL_ERROR, LVL_UNKNOWN };
 
 static int str_to_level(const char *s) {
@@ -54,7 +52,6 @@ static const char *level_to_str(int lvl) {
         case LVL_ERROR: return "ERROR"; default        : return "UNKNOWN"; }
 }
 
-/* ------------------------- CORE ANALYSIS --------------------------- */
 static void add_stats(stats_t *a, const stats_t *b) {
     a->total += b->total; a->info  += b->info;  a->warn  += b->warn;
     a->error += b->error; a->debug += b->debug; a->trace += b->trace;
@@ -109,7 +106,6 @@ static void *analyze_chunk(void *arg) {
     return NULL;
 }
 
-/* ----------------------------- MAIN ------------------------------- */
 static void usage(const char *prog) {
     fprintf(stderr,
 "Usage: %s -f <logfile> [OPTIONS]\n\n"
@@ -163,7 +159,7 @@ int main(int argc, char *argv[]) {
     char *data = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (data == MAP_FAILED) { perror("mmap"); return EXIT_FAILURE; }
 
-    if (threads > st.st_size / (1 << 20)) threads = st.st_size / (1 << 20) ?: 1; /* ~1MB per thread */
+    if (threads > st.st_size / (1 << 20)) threads = st.st_size / (1 << 20) ?: 1; 
 
     pthread_t *tids = calloc(threads, sizeof(*tids));
     thread_arg_t *args = calloc(threads, sizeof(*args));
@@ -190,7 +186,7 @@ int main(int argc, char *argv[]) {
     munmap(data, st.st_size);
     close(fd);
 
-    /* --------------- RESULTS --------------- */
+
     printf("\n===== loganalyzer SUMMARY =====\n");
     printf("Total lines analyzed : %zu\n", aggregate.total);
     printf("  INFO  : %zu\n", aggregate.info);
@@ -209,7 +205,13 @@ int main(int argc, char *argv[]) {
 //      time ./loganalyzer -f big.log -t 8
 //      ./loganalyzer -f big.log -t 128
 //     ./loganalyzer -f big.log -t 8
-//     
+
+
+
+//     TEST FILE
+
+//Test_file
+//   ./loganalyzer_test.sh
 
 
 
