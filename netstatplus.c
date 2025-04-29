@@ -154,8 +154,8 @@ int main(int argc, char* argv[]) {
     // Options while running
         printf("#####################################################################\n");
         printf("Options while running:\n");
-        printf("-1                    quit program\n");
-        printf("-q                    refreshes display\n");
+        printf("-q                    quit program\n");
+        printf("-r                    refreshes display\n");
         printf("-a                    toggle all sockets\n");
         printf("-l                    toggle listening sockets\n");
         printf("-t                    toggle tcp only\n");
@@ -312,4 +312,4 @@ void display_statistics(char* proto_label, struct StatMap proto_map[]) { // disp
         }
         prev_line = line;
     }
-} 
+}
