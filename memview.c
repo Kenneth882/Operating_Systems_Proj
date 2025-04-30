@@ -14,19 +14,17 @@
 #include <ctype.h>
 #include <limits.h> 
 
-/* ──────────────────────────────────────────────────────────────── *
- *  Darwin vs. Linux SysV-IPC compatibility helpers                *
- * ──────────────────────────────────────────────────────────────── */
+
 #ifdef __APPLE__
-  /* On macOS the key field is `_key` and nattch is unsigned short */
+
   #define SHM_KEY(perm)   ((perm)._key)
   #define SHM_NATTCH(val) ((unsigned long)(val))
 #else
-  /* On Linux the key field is `__key` and nattch is already ulong */
+
   #define SHM_KEY(perm)   ((perm).__key)
   #define SHM_NATTCH(val) ((unsigned long)(val))
 #endif
-/* ──────────────────────────────────────────────────────────────── */
+
 
 #define BUFFER_SIZE 4096
 
@@ -407,9 +405,9 @@ docker run --rm -it -v "$PWD":/src -w /src gcc:13 bash
 
 
 
-//./memview -s    
-//./memview -p 1 -v 
-//./memview -m  
+//  ./memview -s    
+//  ./memview -p 1 -v 
+//  ./memview -m  
 // 	./memview -z
 // ./memview -p $$ 
 
@@ -425,4 +423,22 @@ docker run --rm -it -v "$PWD":/src -w /src gcc:13 bash
 */
 
 //    ./memview -s -v
+
+
+/*
+docker run --rm -it \
+  -v "$PWD":/src -w /src \
+  gcc:13 bash -c '\
+    apt-get update -qq && apt-get install -y procps sudo > /dev/null ;\
+    gcc -O2 -D_GNU_SOURCE -o memview memview.c ;\
+    chmod +x test_memview.sh ;\
+    echo "Running tests inside Linux container..." ;\
+
+
+*/ 
+
+
+
+//  ./test_memview.sh'
+
 

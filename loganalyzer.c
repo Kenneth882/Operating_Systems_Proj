@@ -201,9 +201,10 @@ int main(int argc, char *argv[]) {
 
 //    ./loganalyzer -f demo.log
 //      ./loganalyzer -f demo.log -t 4
-//      ./loganalyzer -f demo.log -l warn
+//      ./loganalyzer -f demo.log -l error
+//     
 //      time ./loganalyzer -f big.log -t 8
-//      ./loganalyzer -f big.log -t 128
+//      time ./loganalyzer -f big.log -t 128
 //     ./loganalyzer -f big.log -t 8
 
 
@@ -212,6 +213,10 @@ int main(int argc, char *argv[]) {
 
 //Test_file
 //   ./loganalyzer_test.sh
+// ./timedexec --time 10 -- ./loganalyzer -f big.log -t 4
+
+
+
 
 
 
